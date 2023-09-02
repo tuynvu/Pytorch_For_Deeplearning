@@ -1,0 +1,34 @@
+WellCome to Pytorch
+
+1. Pytorch là gì?
+* Đó là mà mở phục vụ cho DL và ML
+
+2. Pytorch được sử dụng cho gì?
+* Nó cho chúng ta vận dụng và sử lí dữ liệu và sử dụng các thụât toán 
+* Sử dụng nó bằng viết mã Python
+
+3. Đã có những ai sử dụng?
+* Các bạn chắc biết OpenAI : nơi đây đã sử dụng pytorch, bạn có thể lên google gõ ra
+* Microsoft
+
+4. Tại sao nên sử dụng pytorch?
+* Nó là mã nguồn mở
+* Nó cung cấp nhiều mô hình chất lượng
+* Nó Giúp sử lí tăng tốc GPU
+* Nó được sử dụng bởi nhiều tập đoàn lớn
+
+5. Mục lục 
+
+-> Giới thiệu về tensor
+-> Tạo tensor
+-> Lấy thông tin từ tensor
+-> Thao tác với tensor
+-> Xử lí hình dạng tensor
+-> Chỉ số trong tensor
+-> Trộn các tensor, numpy
+-> Khả năng tái lập
+-> Chạy tensor trên GPU
+
+Lưu ý: mình sẽ tạo bố cục
+-> name.txt: file tóm tắt lưu ý của name
+-> code/name.py: thực hành của name

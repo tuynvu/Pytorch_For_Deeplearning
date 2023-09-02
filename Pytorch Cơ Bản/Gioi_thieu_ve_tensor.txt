@@ -1,0 +1,178 @@
+1. Cách cài pytorch vào môi trường pip or anaconda
+
+- Cài bằng pip:
+
+    update pip: pip install --upgrade pip
+    install package: pip install torch torchvision torchaudio
+
+- Cài bằng conda:
+
+    update conda: conda update conda
+    install package:    
+        + conda create --name <env_name> python=3.11
+        + conda activate <env_name>
+        + conda install pytorch torchvision torchaudio -c pytorch
+    update package: conda update --all , conda update namepackage
+
+_______________________________________________________________________
+2. Thêm modul Pytorch vào chương trình
+
+- Cách hiểu tương tự như include, import trong c++, java
++ Syntax:
+    >>> import torch
++ Kiểm tra version: 
+    >>> torch.__version__
+    '1.13.1+cu117'
+
+=> cài đặt thành công
+
+_______________________________________________________________________
+3. Tensor
+
+- Tạo khối trong ML và DL
+- Tạo nên các khối số đại diện cho dữ liệu
+- Ta có thể nói về ảnh
+    + ta tạo nên ảnh với chiều [3, 600, 620] như trong phần code
+    điều đó tương đương [màu, chiều rộng, chiều cao]
+    màu có 3 chiều <=> (R, G, B)
+- Tensor bạn có thể hiểu như cách dùng trong numpy
+
+_______________________________________________________________________
+4. Tạo tensor và cơ bản
+
+- Bài tập đầu tiên của bạn là đọc tài liệu: https://pytorch.org/docs/stable/tensors.html
+trong 10'
+
+- Kiểu dữ liệu: có 3 cách dùng:
+    + dùng cho máy 
+    + CPU : torch.FloatTensor (float32)
+    + GPU : torch.cuda.FloatTensor (float32)
+- Sytax:  
+    # tạo tensor
+    >>> a =  torch.tensor([[1, 2, 3]])
+    tensor([[1, 2, 3]])
+    # điều này có nghĩa là tạo 1 tensor, type là tensor
+
+    # kiểm tra số chiều
+    >>> a.ndim
+    2
+
+    # lấy số từ tensor
+    >>> a[0, 0].item()
+    1
+    >>> a[0, 0]
+    tensor(1)
+
+    # kiểm tra dạng trong tensor
+    # Xác định bằng cách: từng ngoặc 1
+    >>> a.shape
+    torch.Size([1, 3])
+
+Ví Dụ Biểu Diễn Thực Tế:
+- Dữ liệu chúng tôi vừa tạo có thể là số liệu bán hàng của một cửa 
+hàng bít tết và bơ hạnh nhân .
+    >>> TENSOR = torch.tensor([[[1, 2, 3],
+                                [3, 6, 9],
+                                [2, 4, 5]]])
+    # Hàng đầu tiên ngày 
+    # hàng 2 là bít tết
+    # hàng 3 hạnh nhân
+
+- Các loại tensor: 
+    + 1 dim : vector
+    + 2 dim : matrix
+    + n dim: tensor đa chiều
+
+_______________________________________________________________________
+5. Tensor random
+
+- Thay vì các bạn tự chuẩn bị dữ liệu ta có thể random dữ liệu
+- Cách này cũng mang lại hiệu quả nhất định cho model
+
+Syntax:
+    >>> rd = torch.rand(size=(3, 4))
+    >>> rd
+    tensor([[0.7241, 0.8427, 0.8053, 0.9273],
+            [0.5204, 0.0860, 0.5999, 0.7973],
+            [0.8827, 0.3033, 0.6519, 0.1351]])
+    # Trong ví dụ trên thì khi gọi rand với size= (3 , 4), ta được ra một matrix
+    # với các phần tử (0, 1)
+    # Bạn có thể làm nó với ảnh [224, 224, 3] ([height, width, color_channels])
+
+_______________________________________________________________________
+6. Tensor Zeros và Ones
+
+- K cần tạo bằng tay ta có thể dùng phương thức có sẵn trong torch
+Syntax:
+    >>> zr = torch.zeros(size=(3, 4))
+    >>> zr
+    tensor([[0., 0., 0., 0.],
+            [0., 0., 0., 0.],
+            [0., 0., 0., 0.]])
+    >>> on = torch.ones(size=(3, 4))
+    >>> on
+    tensor([[1., 1., 1., 1.],
+            [1., 1., 1., 1.],
+            [1., 1., 1., 1.]])
+
+    # Mặc định kiểu dữ liệu là float32
+    >>> on.dtype
+    torch.float32
+
+    # Chúng ta có thể  thay đổi nó
+    >>> zr = torch.zeros(size=(3, 4), dtype=torch.int32)
+    >>> zr
+    tensor([[0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]], dtype=torch.int32)
+
+_______________________________________________________________________
+7. Tạo tensor trong range và Tensor tương tự (tensor like)
+
+- tensor like method: full_like, zeros_like, ones_like, rand_like, randint_like
+Syntax:
+    >>> ar = torch.arange(1, 6, 2) # (start, end, step)
+    >>> ar
+    tensor([1, 3, 5])
+
+    >>> tensor_like_ar = torch.full_like(ar, 1)
+    >>> tensor_like_ar
+    tensor([1, 1, 1])
+    # full_like: nó chỉ giống hình dạng của ar và điền giá trị khác value=1
+
+    >>> ones_ar = torch.ones_like(ar)
+    >>> ones_ar
+    tensor([1, 1, 1])
+
+_______________________________________________________________________
+8. Kiểu dữ liệu torch
+
+- Kiểu dữ liệu: torch.int(8, 16, 32, 64)
+                torch.float(8, 16, 32, 64)
+                torch.boolean
+- Trong CPU: torch.FloatTensor, torch.DoubleTensor
+             torch.ShortTensor,torch.IntTensor, torch.LongTensor
+             torch.BoolTensor
+- Trong GPU tương tự CPU: thay "torch." bằng "torch.cuda."
+
+Ví dụ:
+    # Default datatype for tensors is float32
+    >>> float_32_tensor = torch.tensor([3.0, 6.0, 9.0],
+                                        dtype=None, # defaults to None, which is torch.float32 or whatever datatype is passed
+                                        device=None, # defaults to None, which uses the default tensor type
+                                        requires_grad=False) # if True, operations performed on the tensor are recorded 
+
+    >>> float_32_tensor.shape, float_32_tensor.dtype, float_32_tensor.device
+    (torch.Size([3]), torch.float32, device(type='cpu'))
+        
+    >>> float_16_tensor = torch.tensor([3.0, 6.0, 9.0],
+                                       dtype=torch.float16) # torch.half would also work
+
+    >>> float_16_tensor.dtype
+    torch.float16
+
+_______________________________________________________________________
+9. Lấy thông tin từ Tensor
+
+
+

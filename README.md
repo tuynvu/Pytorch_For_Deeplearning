@@ -1,4 +1,4 @@
-# I create this repo to rewrite "Experience Learn Of Me" about DL_Pytorch. 
+# I created this repo to rewrite "Experience Learn Of Me" about DL_Pytorch. 
 ## Điểu quan trọng nhắc lại 3 lần:
 * code, code, code, vizualize, vizualize, vizualize 
 ## Học Pytorch từ 0 đến n (n > inf)
