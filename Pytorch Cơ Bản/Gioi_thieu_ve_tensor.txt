@@ -1,3 +1,18 @@
+############################# Mục Lục ##############################################################################
+1. Cách cài pytorch vào môi trường pip or anaconda
+2. Thêm modul Pytorch vào chương trình
+3. Tensor
+4. Tạo tensor và cơ bản
+5. Tensor random
+6. Tensor Zeros và Ones
+7. Tạo tensor trong range và Tensor tương tự (tensor like)
+8. Kiểu dữ liệu torch
+9. Lấy thông tin từ Tensor
+10. Thao tác cơ bản với tensor - Toán tử với tensor
+11. Một số lỗi chung phổ biến trong DL:  lỗi shape
+####################################################################################################################
+
+_______________________________________________________________________
 1. Cách cài pytorch vào môi trường pip or anaconda
 
 - Cài bằng pip:
@@ -174,5 +189,148 @@ Ví dụ:
 _______________________________________________________________________
 9. Lấy thông tin từ Tensor
 
+- 3 thuộc tính phổ biến trong tensor mà bạn thấy trước đó:
+    + shape: Dạng của tensor là gì?
+    + device: Thiết bị chạy của tensor là gì?
+    + dtype: Loại dữ liệu của các phần tử được lưu trong tensor là gì?
+- Tạo ra random tensor thì:
+    + tensor.rand(size): mỗi phần tử trong khoảng từ 0 -> 1
+    EX:
+    >>> rd_tensor = torch.rand(size=(3, 4))
+    tensor([[0.2159, 0.3589, 0.9351, 0.7204],
+            [0.4696, 0.4310, 0.5163, 0.5026],
+            [0.2548, 0.7579, 0.4583, 0.5948]])
+    >>> rd_tensor.shape
+    torch.Size([3, 4])
+    >>> rd_tensor.device
+    device(type='cpu')
+    >>> rd_tensor.dtype
+    torch.float32
+- Khi ta chạy các chường trình pytorch, lỗi có thể rất liên quan đến 3 thuộc tính ở trên
+và để fix lỗi thì các bạn có thể in ra các thuộc tính để sửa lỗi đơn giản hơn
+    + Bạn có thể đặt ra các câu hỏi:
+    -> tensor của mình hình dạng gì
+    -> kiểu dữ liệu của nó là gì: float32, int64 hay bool
+    -> nó đang chạy trên thiết bị gì ở đâu
+    Mong bạn thấy điều này thú vị
 
+_______________________________________________________________________
+10. Thao tác cơ bản với tensor - Toán tử với tensor
 
+- Trong học sâu, dữ liệu có thể là (ảnh, text, video, audio, ......) và các dữ liệu đó được biểu
+diễn dưới hình dạng của 1 tensor cho 1 loại dữ liệu ở trên
+
+- Một mô hình được tạo lên là sự thao tác trên các đối tượng tensor đó và các thuật toán đều liên
+quan dến tensor đó
+
+- Các tensor đại diện cho các dữ liệu đầu vào vì nó biểu diễn dữ liệu, nó đại diện cho dữ liệu dầu vào
+dữ liệu train, test
+
+- Ta có thể coi tensor là các đồ vật thực tế được chuyển thể biểu diễn cho máy tính hiểu đó là Tensor
+trong pytorch
+
+- Các thao tác cơ bản:
+    + cộng: +
+    + trừ: -
+    + nhân: *
+    + chia: /
+    + nhân ma trận: @ (trong numpy)
+  Còn các thao tác khác nữa, nhưng đây là các thao tác cơ bản xây dựng lên mạng NN (neural network)
+
+- Như các bạn đã biết mạng nơ ron được cấu tạo từ các ma trận trọng số W, và bạn xếp chồng các matrix
+đó lên nhau và bạn đã tạo nên một mạng nơ ron phức tạp từ các matrix đó
+    -> tip: bạn có thể hình dung như bạn đang xếp lego vậy :)))
+
+- Các thao tác cơ bản ở trên bạn có thể hiểu cách dùng của nó giống như trong numpy
+
+a, Toán tử cơ bản: + - * /
+* Thao tác 1 tensor với 1 số
+-> Từng phần tử 1 trong tensor sẽ thao tác toán tử với các số đó
+EX:
+    >>> tensor1 = torch.rand((1, 3))
+    tensor([[0.9866, 0.0876, 0.4429]])
+
+    >>> tensor1 + 1
+    tensor([[1.9866, 1.0876, 1.4429]])
+    >>> tensor1 - 1
+    tensor([[-0.0134, -0.9124, -0.5571]])
+    >>> tensor1 * 2
+    tensor([[1.9733, 0.1752, 0.8857]])
+    >>> tensor1 / 2
+    tensor([[0.4933, 0.0438, 0.2214]])
+
+* Thao tác 1 tensor với 1 tensor khác
+-> Từng phần tử đôi một thao tác toán tử với nhau
+EX:
+    >>> tensor1 = torch.rand((1, 3))
+    >>> tensor2 = torch.rand((1, 3))
+    >>> tensor1, tensor2
+    (tensor([[0.8398, 0.8819, 0.3660]]), tensor([[0.5670, 0.9662, 0.9384]]))
+
+    >>> tensor1 + tensor2
+    tensor([[1.4069, 1.8481, 1.3044]])
+    >>> tensor1 - tensor2
+    tensor([[ 0.2728, -0.0842, -0.5724]])
+    >>> tensor1 * tensor2
+    tensor([[0.4762, 0.8521, 0.3434]])
+    >>> tensor1 / tensor2
+    tensor([[1.4812, 0.9128, 0.3900]]) # chú ý phần tử 0
+
+* các bạn cũng không nhất thiết dùng các toán tử + - * / mà nó thể dùng các phương thức
+khi các bạn quen với java
+    + torch.add()
+    + torch.sub()
+    + torch.multiply()
+    + torch.divide()
+
+b, Nhân Matrix Tensor (toán tử @: trong numpy)
+
+- Nó rất quan trọng cho các mô hình học sâu, phần lớn liên quan đến matrix tensor
+- Toán tử : @ (giống numpy)
+- Cách nhân matrix bạn đã học trong đại số tuyến tính (linear algebra)
+    * Mình sẽ nhăc lại chút quy tăc nhân: cần thiếu nhất là shape(a, b) @ shape(b, c)
+    * số dòng của matrix trước bằng số cột matrix sau
+    * Và thứ tự rất quan trọng trong nhân matrix
+EX: shape
+    (3, 2) @ (3, 2) won't work
+    (2, 3) @ (3, 2) will work
+    (3, 2) @ (2, 3) will work
+    (2, 3) @ (3, 2) -> (2, 2)
+    (3, 2) @ (2, 3) -> (3, 3)
+
+EX:
+    >>> tensor = torch.tensor([1, 2, 3])
+    >>> tensor.shape
+    torch.Size([3])
+    >>> tensor * tensor
+    tensor([1, 4, 9])
+    >>> torch.matmul(tensor, tensor)
+    tensor(14)
+    >>> tensor @ tensor
+    tensor(14)
+
+- Ở đây ta cũng có thể không dùng toán tử @ mà thay vào đó torch.mulmat()
+- Ta có thể xây dựng thủ công nhân matrix:
+EX:
+# Tự xây dựng mulmatrix
+    >>> %%time
+    >>> value = 0
+    >>> for i in range(len(tensor)):
+            value += tensor[i] * tensor[i]
+    >>> value
+    tensor(14)
+    CPU times: user 2.37 ms, sys: 0 ns, total: 2.37 ms
+    Wall time: 6.18 ms
+
+# Modul sẵn
+    >>> %%time
+    >>> torch.matmul(tensor, tensor)
+    tensor(14)
+    CPU times: user 85 µs, sys: 0 ns, total: 85 µs
+    Wall time: 86.8 µs
+
+-> Từ 2 ví dụ trên bạn thấy rằng hàm tạo sẵn của torch có tốc độ chạy rất nhanh so với tự tạo
+-> Bạn nên áp dụng torch.mulmat() để cải thiện tốc độ của mô hình
+
+_______________________________________________________________________
+11. Một số lỗi chung phổ biến trong DL:  lỗi shape
