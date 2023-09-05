@@ -10,6 +10,8 @@
 9. Lấy thông tin từ Tensor
 10. Thao tác cơ bản với tensor - Toán tử với tensor
 11. Một số lỗi chung phổ biến trong DL:  lỗi shape
+12. Lớp torch.nn.Linear()
+13. Tìm min, max, mean, std, .....
 ####################################################################################################################
 
 _______________________________________________________________________
@@ -309,7 +311,7 @@ EX:
     >>> tensor @ tensor
     tensor(14)
 
-- Ở đây ta cũng có thể không dùng toán tử @ mà thay vào đó torch.mulmat()
+- Ở đây ta cũng có thể không dùng toán tử @ mà thay vào đó torch.matmul(), torch.mm()
 - Ta có thể xây dựng thủ công nhân matrix:
 EX:
 # Tự xây dựng mulmatrix
@@ -330,7 +332,97 @@ EX:
     Wall time: 86.8 µs
 
 -> Từ 2 ví dụ trên bạn thấy rằng hàm tạo sẵn của torch có tốc độ chạy rất nhanh so với tự tạo
--> Bạn nên áp dụng torch.mulmat() để cải thiện tốc độ của mô hình
+-> Bạn nên áp dụng torch.matmul() để cải thiện tốc độ của mô hình
 
 _______________________________________________________________________
 11. Một số lỗi chung phổ biến trong DL:  lỗi shape
+
+- Phần lớn trong DL là phép nhân và thực hiện các toán tử trên ma trận vì thế mà hình dạng của ma trận cần được kiểm
+soát nghiêm ngặt và đúng đinh dạng cho phép nhân. Vì thế lỗi phổ biến trong DL là bị sai về hình dạng
+- Cần lưu ý khi ta thực hiện toán tử với matrix thì ta cần chú ý đến dạng của tensor mà chúng ta đang thao tác là gì
+- Nên ta có thể biết dạng của nó trước khi thực hiện thao tác với nó
+    + Ta kiếm tra bằng thuộc tính shape ta đã học ở trên
+
+EX:
+    >>> tensor_A = torch.tensor([[1, 2],
+                                [3, 4],
+                                [5, 6]], dtype=torch.float32)
+    >>> tensor_B = torch.tensor([[7, 10],
+                                [8, 11],
+                                [9, 12]], dtype=torch.float32)
+    >>> tensor_A @ tensor_B
+    RuntimeError: mat1 and mat2 shapes cannot be multiplied (3x2 and 3x2)
+
+-> error vì không đúng chiều, ta có thể xem lại cách nhân ma trận bên đại số tuyến tính ta sẽ giải quyết vấn đề này
+- Để giải quyết vấn đề trên ta có thê thực hiện các phương thức sau:
+    + torch.transpose(tensor, dim0, dim1): khi mà abs(dim0 - dim1): chẵn thì giữ nguyên, lẻ thì đổi chiều
+    + tensor.T
+    >>> tenror_A.T @ tensor_B
+    tensor([[ 76., 103.],
+            [100., 136.]]
+
+_______________________________________________________________________
+12. Lớp torch.nn.Linear()
+- Tiếp đến tối giới thiệu cho bạn lớp: torch.nn.linear(): còn được gọi là lớp kết nối đầy đủ (full connect layer)
+    + để tạo đầu ra trong DL thì ta nhân ma trận trọng số W với đầu vào x và cộng với hệ số bias để ta thu được Y
+    => Y = X @ W.T + B
+    Tại đây: X: đầu vào của 1 lớp, (trong học sâu, để tạo nên model thì ta chồng lên nhau các lớp như lirnear ở trên)
+             Y: Kết quả đầu ra sau khi nhân W với X + B
+             W: là trọng số trong DL, ban đầu nó được tạo ngẫu nhiên và sau đó nó học tập từ dữ liệu vào xây dựng lại
+             trọng số đó (Các bạn chú ý .T là transpose chuyển vị)
+             B: trọng số bias được dùng để bù đặp lại thiếu sót của trọng số hay của bất kì model nào
+
+- Ngay từ cái tên bạn đã hiểu là tuyến tính, bạn có hình dung nó rất quen với thứ gì đó mà chúng ta đã học trong 12 năm
+học toán không, và đó là đường thăng y = ax + b mà mình đã được học rồi đó
+
+- ở đây ta học được Method khác:
+    + torch.manual_seed(number): khi sử dụng cái này thì bạn hiểu nó được dùng như trong random.seed() là nó sẽ tái tạo
+    lại cái random ban đầu, khác với random là cái method này phục vụ cho các lớp ngẫu nhiên như linear()
+    + torch.nn.Linear(): nó tự tạo ngẫu nhiên trọng số weight ban đầu, và để không bị thay đổi nhiều là ta dùng method
+    trên
+
+- Ta thử làm gì đó với hàm:
+EX:
+    >>> torch.manual_seed(42)
+    >>> linear = torch.nn.Linear(in_features=2, out_features=6)
+    >>> print(linear.weight)
+    >>> x = tensor_A
+    >>> output = linear(x)
+    >>> print(f"Input shape: {x.shape}\n")
+    >>> print(f"Output:\n{output}\n\nOutput shape: {output.shape}")
+    # output = (3, 2) @ (2, 6) => (3, 6)
+    Parameter containing:
+    tensor([[ 0.5406,  0.5869],
+            [-0.1657,  0.6496],
+            [-0.1549,  0.1427],
+            [-0.3443,  0.4153],
+            [ 0.6233, -0.5188],
+            [ 0.6146,  0.1323]], requires_grad=True)
+    Input shape: torch.Size([3, 2])
+
+    Output:
+    tensor([[2.2368, 1.2292, 0.4714, 0.3864, 0.1309, 0.9838],
+            [4.4919, 2.1970, 0.4469, 0.5285, 0.3401, 2.4777],
+            [6.7469, 3.1648, 0.4224, 0.6705, 0.5493, 3.9716]],
+           grad_fn=<AddmmBackward0>)
+
+    Output shape: torch.Size([3, 6])
+
+Câu hỏi: Điều gì xảy ra nếu bạn thay đổi in_features từ 2 thành 3 ở trên? Nó có báo lỗi không? Làm cách nào bạn có thể
+thay đổi hình dạng của đầu vào (x) để phù hợp với lỗi? Gợi ý: chúng ta phải làm gì với tensor_B ở trên?
+
+* Trong DL thì việc nhân matrix  rất là quan trọng
+    + Nếu bạn chưa từng làm việc này trước đây thì phép nhân ma trận ban đầu có thể là một chủ đề khó hiểu.
+    + Nhưng sau khi bạn thử nghiệm nó vài lần và thậm chí mở được một vài mạng lưới thần kinh, bạn sẽ nhận thấy nó ở
+    khắp mọi nơi.
+    + Hãy nhớ rằng, phép nhân ma trận là tất cả những gì bạn cần.
+    + Khi bạn bắt đầu tìm hiểu sâu hơn về các lớp mạng thần kinh và xây dựng lớp mạng của riêng mình, bạn sẽ tìm thấy
+    các phép nhân ma trận ở khắp mọi nơi.
+
+VÌ THẾ ĐIỀU RẤT QUAN TRỌNG TRONG DL VÀ NN LÀ NHÂN MA TRẬN: NẾU CÁC BẠN CHƯA BIẾT CÁC THÌ HỌC ĐỌC SÁCH ĐẠI SỐ TUYẾN TÍNH
+(LINEAR ALGEBRA)
+
+_______________________________________________________________________
+13. Tìm min, max, mean, std, .....
+
+
