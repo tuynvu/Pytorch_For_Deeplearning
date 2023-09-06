@@ -12,6 +12,7 @@
 11. Một số lỗi chung phổ biến trong DL:  lỗi shape
 12. Lớp torch.nn.Linear()
 13. Tìm min, max, mean, std, .....
+14. Vị trí min/max
 ####################################################################################################################
 
 _______________________________________________________________________
@@ -425,4 +426,39 @@ VÌ THẾ ĐIỀU RẤT QUAN TRỌNG TRONG DL VÀ NN LÀ NHÂN MA TRẬN: NẾU 
 _______________________________________________________________________
 13. Tìm min, max, mean, std, .....
 
+- Ở đây ta tìm hiểu thêm Method mới:
+Syntax: torch.arange(start, end, step)
+    >>> torch.arange(0, 10, 1)
+    tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+- Ngoại trừ mean thì ta cần chú ý là nó chỉ áp dụng với dtype=float
+EX:
+    >>> print(f"Minimum: {x.min()}")
+    >>> print(f"Maximum: {x.max()}")
+    Minimum: 0
+    Maximum: 9
+
+    # print(f"Mean: {x.mean()}") # this will error
+- Để khắc phục lỗi trên ta cần chuyển x sang kiểu dữ liệu float, torch.float(26, 32...)
+    -> ta dùng phương thức torch.to(), torch.type()
+    >>> print(f"Mean: {x.type(torch.float32).mean()}") # won't work without float datatype
+    Mean: 4.5
+
+    >>> print(f"Sum: {x.sum()}")
+    Sum: 45
+
+- Thay vì chúng ta truy cập phương thức của nó luôn như trên
+    + x = torch.arange(0, 10, 1)
+    + x.min(), x.max(), x.to(torch.float16).mean(), x.sum()
+
+- Ta có thể dùng luôn phương thức của đối tượng torch
+    + x = torch.arange(0, 10, 1)
+    + torch.min(x), torch.max(x), torch.mean(x.type(torch.float64)), torch.sum(x)
+
+EX:
+    >>> torch.max(x), torch.min(x), torch.mean(x.type(torch.float32)), torch.sum(x)
+    (tensor(9), tensor(0), tensor(4.5000), tensor(45))
+
+_______________________________________________________________________
+14. Vị trí min/max
 
