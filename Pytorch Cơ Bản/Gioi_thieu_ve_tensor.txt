@@ -13,6 +13,9 @@
 12. Lớp torch.nn.Linear()
 13. Tìm min, max, mean, std, .....
 14. Vị trí min/max
+15. Thay đổi kiểu dữ liệu trong tensor
+16. Reshaping, stacking, squeezing, unsqueezing
+17. Chỉ số, lấy dữ liệu tử tensor
 ####################################################################################################################
 
 _______________________________________________________________________
@@ -462,3 +465,157 @@ EX:
 _______________________________________________________________________
 14. Vị trí min/max
 
+- Với phần 13 ở trên thì ta thấy nó trả về giá trị min, max của tensor
+- Và trong phần này thay vì trả về giá trị min, max thì nó trả về vị trí của giá trị min, max đó trong tensor đó
+
+Syntax: tensor.argmax(), tensor.argmin() : index bắt đầu từ 0
+
+    >>> tensor = torch.arange(10)
+    >>> print("tensor:", tensor)
+    tensor: tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    >>> print("index min:", tensor.argmin().item())
+    index min: 0
+
+    >>> print("index max:", tensor.argmax().item())
+    index max: 9
+
+_______________________________________________________________________
+15. Thay đổi kiểu dữ liệu trong tensor
+
+- Thay đổi kiểu dữ liệu là quan trọng trong tensor vì bạn có thể thấy các lỗi cơ bản:
+    + lỗi mà bạn đã thấy ở trên là torch.mean() - chỉ phục vụ với torch.float
+    + khi mà bạn cố thức hiện ép kiểu torch.int32 -> torch.int16 -> error
+
+- Vì thế bạn có thể thay đổi dtype cho phù hợp:
+Syntax: torch.Tensor.type()
+Ex:
+    >>> tenInt16 = torch.tensor([1, 2, 3], dtype=torch.int16)
+    >>> tenInt16
+    tensor([1, 2, 3], dtype=torch.int16)
+
+    >>> tenInt16 = tenInt16.type(torch.int64)
+    >>> tenInt16.dtype
+    torch.int64
+
+- Bài tập: Cho đến nay, chúng ta đã đề cập đến một số phương pháp tensor khá tốt nhưng còn rất nhiều phương pháp khác
+trong torch. [https://pytorch.org/docs/stable/tensors.html] tôi khuyên bạn nên dành 10 phút để cuộn qua và xem xét bất
+kỳ phương pháp nào thu hút sự chú ý của bạn. Nhấp vào chúng và sau đó tự viết chúng ra mã để xem điều gì sẽ xảy ra.
+
+_______________________________________________________________________
+16. Reshaping, stacking, squeezing, unsqueezing
+
+- Bình thường chúng ta sẽ cần định hình dạng lại dữ liệu để cho phụ hợp với đầu vào của model, có thể là Flatten, ....
+- Các Method cơ bản:
+
+    >>> ten = torch.arange(0, 10)
+    >>> ten
+    tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    + torch.reshape(input, shape) hoặc torch.Tensor.reshape()
+    >>> ten.reshape(2, 5)
+    tensor([[0, 1, 2, 3, 4],
+            [5, 6, 7, 8, 9]])
+    >>> torch.reshape(ten, shape=(2, 5))
+    tensor([[0, 1, 2, 3, 4],
+            [5, 6, 7, 8, 9]])
+
+    + torch.Tensor.view(shape) or torch.view_copy(input, size): trả về dữ liệu tensor trong hình dạng shape và dữ liệu
+    của tensor ban đầu
+    >>> ten.view(2, 5)
+    tensor([[0, 1, 2, 3, 4],
+            [5, 6, 7, 8, 9]])
+    >>> torch.view_copy(ten, size=(5, 2)
+    tensor([[0, 1],
+            [2, 3],
+            [4, 5],
+            [6, 7],
+            [8, 9]])
+
+    + torch.stack(tensor, dim=0) : nối các tensor theo chiều dim và các tensor phải cùng size
+        -> dim = 0 thì chồng dần các tensor lên nhau
+        -> dim = 1 thì chồng từng phần tử lên rồi chồng lên nhau xem ví dụ
+    >>> ten1 = torch.arange(10).reshape(2,5)
+    tensor([[0, 1, 2, 3, 4],
+            [5, 6, 7, 8, 9]])
+    >>> ten2 = torch.arange(10, 20).reshape(2, 5)
+    tensor([[10, 11, 12, 13, 14],
+            [15, 16, 17, 18, 19]])
+
+    >>> torch.stack((ten1, ten2), dim=0)
+    tensor([[[ 0,  1,  2,  3,  4],
+            [ 5,  6,  7,  8,  9]],
+
+            [[10, 11, 12, 13, 14],
+            [15, 16, 17, 18, 19]]])
+    >>> torch.stack((ten1, ten2), dim=1)
+    tensor([[[ 0,  1,  2,  3,  4],
+            [10, 11, 12, 13, 14]],
+
+            [[ 5,  6,  7,  8,  9],
+            [15, 16, 17, 18, 19]]])
+
+    + torch.squeeze(input): xóa đi chiều là 1
+    >>> ten
+    tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    >>> a = ten.reshape(10, 1)
+    >>> a
+    tensor([[0],
+            [1],
+            [2],
+            [3],
+            [4],
+            [5],
+            [6],
+            [7],
+            [8],
+            [9]])
+    >>> a.shape
+    torch.Size([10, 1])
+
+    >>> b = a.squeeze()
+    >>> b
+    tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    >>> b.shape
+    torch.Size([10])
+
+    + torch.unsqueeze(input): thêm chiều 1 vào shape
+    >>> b.unsqueeze(dim=0)
+    tensor([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]])
+
+    >>> b.unsqueeze(dim=1)
+    tensor([[0],
+            [1],
+            [2],
+            [3],
+            [4],
+            [5],
+            [6],
+            [7],
+            [8],
+            [9]])
+
+    + torch.permute(input, dims) : trả về chế độ xem hoán vị số chiều trong tensor
+        -> ví dụ chiều là (224: index0, 250: index1, 3: index2) và khi ta permute nó kiểu (2, 1, 0)
+            => chiều sẽ thay đổi theo chỉ sô (3, 250, 224)
+        -> kiểu reshape: nhưng đây là đổi chiều thay vì hình dạng
+    # a dạng (10: index0, 1: index1)
+    >>> a.permute(0, 1) # vẫn là shape(10, 1)
+    # torch.Size([10, 1])
+    tensor([[0],
+            [1],
+            [2],
+            [3],
+            [4],
+            [5],
+            [6],
+            [7],
+            [8],
+            [9]])
+    >>> a.permute(1, 0) # shape thay đổi vị trí 1 là 1, 0 là 10 -> shape(10, 1) => shape(1, 10)
+    # torch.Size([1, 10])
+    tensor([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]])
+
+_______________________________________________________________________
+17. Chỉ số, lấy dữ liệu tử tensor
