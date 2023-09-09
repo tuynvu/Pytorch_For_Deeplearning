@@ -17,6 +17,7 @@
 16. Reshaping, stacking, squeezing, unsqueezing
 17. Chỉ số, lấy dữ liệu tử tensor
 18. Pytorch Tensor && Numpy Array
+19. Cố gắng tái sãn xuất ( lấy ngẫu nhiên ra khỏi ngẫu nhiên )
 ####################################################################################################################
 
 _______________________________________________________________________
@@ -647,3 +648,41 @@ EX:
 
 _______________________________________________________________________
 18. Pytorch Tensor && Numpy Array
+
+- Khi bạn quen thao tác với numpy hơn thì ta có Method chuyển từ tensor -> numpy
+
+Syntax: torch.Tensor.numpy()
+        torch.from_numpy(ndarray)
+
+EX:
+    >>> tensor = torch.arange(10)
+    >>> tensor
+    tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    >>> array_numpy = tensor.numpy()
+    >>> array_numpy, tensor
+    (array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
+
+    >>> import numpy as np
+    >>> ndarray = np.arange(10)
+    >>> ndarray,
+    (array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),)
+
+    >>> tensor = torch.from_numpy(ndarray)
+    >>> ndarray, tensor
+    (array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
+
+- Chú ý rằng điều này không giống trong list gán với nhau:
+    + list = list => nó trỏ vào cùng 1 vị trí nên nó thay đổi 1 chỗ thì cái còn lại cũng thay đổi
+    + Cái ở trên giứa numpy và tensor thì đã được xử lí và không xảy ra lỗi trên
+    + Không trỏ cùng 1 chỗ
+
+_______________________________________________________________________
+19. Cố gắng tái sãn xuất ( lấy ngẫu nhiên ra khỏi ngẫu nhiên )
+
+
+
+
+
+
+
