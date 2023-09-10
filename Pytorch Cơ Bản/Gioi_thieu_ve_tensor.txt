@@ -17,7 +17,8 @@
 16. Reshaping, stacking, squeezing, unsqueezing
 17. Chỉ số, lấy dữ liệu tử tensor
 18. Pytorch Tensor && Numpy Array
-19. Cố gắng tái sãn xuất ( lấy ngẫu nhiên ra khỏi ngẫu nhiên )
+19. Cố gắng tái sản xuất ( lấy ngẫu nhiên ra khỏi ngẫu nhiên )
+20. Chạy tensor trên GPU ( thức hiện tính toán nhanh hơn )
 ####################################################################################################################
 
 _______________________________________________________________________
@@ -678,7 +679,27 @@ EX:
     + Không trỏ cùng 1 chỗ
 
 _______________________________________________________________________
-19. Cố gắng tái sãn xuất ( lấy ngẫu nhiên ra khỏi ngẫu nhiên )
+19. Cố gắng tái sản xuất ( lấy ngẫu nhiên ra khỏi ngẫu nhiên )
+
+- Các hệ số random đôi khi rất là tốt khi bạn khởi tạo, nhưng đổi lúc bạn muốn nó bớt ngẫu nhiên đi ta dùng phương thức
+Syntax:
+    torch.manual_seed(seed=)
+
+Ex:
+    >>> torch.manual_seed(42)
+    >>> tensor42 = torch.rand((2, 3))
+    >>> tensor42.dtype, tensor42
+    (torch.float32,
+    tensor([[0.8823, 0.9150, 0.3829],
+           [0.9593, 0.3904, 0.6009]]))
+
+_______________________________________________________________________
+20. Chạy tensor trên GPU ( thức hiện tính toán nhanh hơn )
+
+
+
+
+
 
 
 
