@@ -12,7 +12,7 @@
 | **Phần** | **Bao gồm** | **Hoàn Thành** |
 | ----- | ----- |----------------|
 |00.Pytorch - cơ bản| Nhiều thao tác với Pytorch cho học sâu và mạng nơ ron| True           |      
-|01.Pytorch - Quy trình làm việc| Cách tiếp cận về học sâu, tạo mạng với pytorch| False          |
+|01.Pytorch - Quy trình làm việc| Cách tiếp cận về học sâu, tạo mạng với pytorch| Processing     |
 |02.Pytorch - mạng phân loại| Sử dụng 01 để giải quyết về mạng phân loại| False          |
 |03.Pytorch - thị giác máy tính| Cách pytorch giải quyết vấn đề thị giác máy tính| False          |
 |04.Pytorch - bộ dữ liệu tùy chỉnh| Tải dữ liệu trong pytorch| False          |
