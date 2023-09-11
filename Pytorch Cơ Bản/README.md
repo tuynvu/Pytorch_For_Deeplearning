@@ -1,5 +1,5 @@
 # Pytorch Cơ Bản
-## Mục lục
+## Mục lục File Gioi_thieu_ve_tensor.txt
 1. Cách cài pytorch vào môi trường pip or anaconda
 2. Thêm modul Pytorch vào chương trình
 3. Tensor
