@@ -17,8 +17,7 @@ WellCome to Pytorch
 * Nó Giúp sử lí tăng tốc GPU
 * Nó được sử dụng bởi nhiều tập đoàn lớn
 
-5. Mục lục 
-
+5. Mục lục
 -> Giới thiệu về tensor
 -> Tạo tensor
 -> Lấy thông tin từ tensor
