@@ -1,0 +1,31 @@
+################### Mục lục Pytorch Quy Trình Làm Việc #################################
+1. Tổng quan
+
+
+
+
+
+
+
+
+########################################### END ##########################################
+
+_________________________________________________________________________________________________________________________
+1. Tổng quan
+
+ - Bản chất của ML và DL là dử dụng các bộ dữ liệu có sẵn trong thời đại dữ liệu rất nhiều hiện nay, và từ đó bạn dử dụng
+ các dữ liệu có ích cho mô hình của mình, và dụng thụât toán tạo nên các bộ số phù hợp với các tham số
+ - Trong đố số lượn tham số rất quan trọng trong tinh chỉnh
+ - Từ đó ta có thể sử dụng các dữ liệu thực tế để tạp ta tính chấ trong tương lai với các xác xuất chính xác tùy theo model
+
+ - Những thứ mà tôi nói trong bài viết này:
+    + Lấy dữ liệu : rất nhiều dữ liệu
+    + Xậy dựng model: Ta sẽ tạo dụng mô hình cho học các dữ liệu: ta sẽ chọn loss function, optimizer, vòng lập trainning
+    + Chạy vòng lặp training trên các dữ liệu thu thập: ta đã có data và model nên ta sẽ tìm các hệ số phù hợp với nó
+    + Tạo dự đoán với các dữ liệu khác và đánh giá
+    + Lưu và Loading model để sử dùng lại
+    + Cách đưa cho người khác sử dụng
+
+_________________________________________________________________________________________________________________________
+
+
