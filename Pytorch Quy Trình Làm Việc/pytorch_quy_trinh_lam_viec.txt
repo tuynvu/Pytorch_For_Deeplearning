@@ -1,6 +1,7 @@
 ################### Mục lục Pytorch Quy Trình Làm Việc #################################
 1. Tổng quan
 2. Dữ liệu (data)
+3. Phân chia dữ liệu để training và testing
 
 
 
@@ -28,4 +29,41 @@ ________________________________________________________________________________
 
 _________________________________________________________________________________________________________________________
 2. Dữ liệu (data)
+
+- Data là những thứ trong thực tế: có thể là ảnh, video, các bảng số, .....
+- Khi mà bạn có những dữ liệu đó mà những dữ liệu thực tế đó máy chúng ta không thể hiểu mà máy chỉ có thể hiểu những con
+số, vì thế bạn cần cách chuyển đổi nó sang số
+- Bạn cần biết cách biểu diễn các dữ liệu đó vào máy để nó có thể hiểu rằng đó là của dữ liệu nào: kiểu cấu trúc nào
+phù hợp với dữ liệu của bạn có thể là vector, matrix, siêu mặt phẳng
+
+- Để thực hiện việc chơi ML:
+    + Bước 1: bạn cần chuẩn bị dữ liệu tốt, dữ liệu mà biểu dĩễn, đại diện cho việc mà chúng ta cần làm
+    + Bước 2: bạn tìm kiếm 1 model hay tự xây dựng 1 model với các tham số phù hợp với đầu ra
+
+- Khi bạn thực hiện được nó thì bạn có thể tạo ra 1 mô hình ML
+- Khi mà bạn chưa có dữ liệu:
+- Ta có thể tạo ra đường thẳng theo các tham số ngẫu nhiên đó là mô hình linear regression
+
+EX:
+    >>> weight = 0.4
+    >>> bias = 0.6
+
+    >>> x = torch.arange(1, 4, 1).unsqueeze(1)
+    >>> y = x * weight + bias
+
+    >>> x, y
+    (tensor([[1],
+             [2],
+             [3]]),
+     tensor([[1.0000],
+             [1.4000],
+             [1.8000]]))
+
+- Các bạn có thể đố ở mô hình trên có các tham số: weight, bias
+- Đó là các param ngẫu nhiên
+- Để nó có nghĩa là ta cần điểu chỉnh các tham số đó theo bộ dữ liệu chúng ta mong muốn
+
+_________________________________________________________________________________________________________________________
+3. Phân chia dữ liệu để training và testing
+
 
