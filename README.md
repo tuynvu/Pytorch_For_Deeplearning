@@ -32,7 +32,7 @@
 * Tập trung
 
 ## Tham Khảo
-[Source](https://www.learnpytorch.io)
+[Source Video](https://www.youtube.com/watch?v=V_xro1bcAuA&t=4008s)
 
 
 
