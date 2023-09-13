@@ -2,6 +2,7 @@
 1. Tổng quan
 2. Dữ liệu (data)
 3. Phân chia dữ liệu để training và testing
+4. Xây dựng model
 
 
 
@@ -66,4 +67,34 @@ EX:
 _________________________________________________________________________________________________________________________
 3. Phân chia dữ liệu để training và testing
 
+- Việc quan trọng trong việc hoàn thiện model đó là ta chia bộ dữ liệu mà chúng ta có sẵn thành 2 hoặc 3 phần:
+    + train data: bộ dữ liệu để trainning: luôn có
+    + validation data: bộ dữ liệu thẩm định: có thể có hoặc không
+    + test data: tạo bộ dữ liệu sau khi train model để có thể xét tính khả thi của nó
 
+EX:
+    >>> split_train = int(0.8 * len(x))
+    >>> train_x, test_x, train_y , test_y = x[:split_train], x[split_train:], y[:split_train], y[split_train:]
+    >>> len(train_x), len(train_y), len(test_x), len(test_x)
+    (40, 40, 10, 10)
+
++ Ta sẽ hiển thị x,y lên đồ thị
+    >>> import matplotlib.pyplot as plt
+
+    >>> def plot_predict(data_x=train_x, data_y=train_y, data_test_x=test_x, data_test_y=test_y, predictions=None):
+
+            plt.scatter(data_x, data_y, s=4, label="train")
+            plt.scatter(data_test_x, data_test_y, s=20, label="test")
+            if predictions is not None:
+                plt.scatter(data_test_x, predictions, s=4, label="predictions")
+
+            plt.legend()
+            plt.show()
+
+        plot_predict(predictions=predictions)
+
+- Việc không kém quan trọng trong ML đó là việc vizualize dữ liệu, ta cần trực quan hóa dữ liệu để có thể điều chỉnh tham
+số cho phù hợp nhất có thể
+
+_________________________________________________________________________________________________________________________
+4. Xây dựng model
