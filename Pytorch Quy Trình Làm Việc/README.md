@@ -4,7 +4,10 @@
 2. Dữ liệu (data)
 3. Phân chia dữ liệu để training và testing
 4. Xây dựng model
-
+5. Điều cần thiết khi xậy dựng mô hình Pytorch
+6. Kiểm tra nội dung của model Pytorch
+7. Tạo dự đoán với torch.inference_mode()
+8. Training Model
 
 ## Chú ý:
 * name.txt: file tóm tắt lưu ý của name

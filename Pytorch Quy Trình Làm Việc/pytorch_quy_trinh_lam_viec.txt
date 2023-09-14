@@ -3,12 +3,10 @@
 2. Dữ liệu (data)
 3. Phân chia dữ liệu để training và testing
 4. Xây dựng model
-
-
-
-
-
-
+5. Điều cần thiết khi xậy dựng mô hình Pytorch
+6. Kiểm tra nội dung của model Pytorch
+7. Tạo dự đoán với torch.inference_mode()
+8. Training Model
 
 ########################################### END ##########################################
 
@@ -98,3 +96,144 @@ số cho phù hợp nhất có thể
 
 _________________________________________________________________________________________________________________________
 4. Xây dựng model
+
+- Bây giờ chúng ta xây dựng 1 model sử dụng các chấm blue để dự đoán các chấm green
+- Bây giờ ta sẽ tái tạo mô hình linear regression với pytorch thuần túy
+- Model Linear Regression:
+    class LinearRegression(torch.nn.Module): # module nn.Module là nó chứa hầu hết các thứ trong torch, các khổi
+        def __init__(self):
+            super(LinearRegression, self).__init__() # chạy hàm khởi tạo bên thằng cha
+            self.weight = torch.nn.Parameter(torch.randn(1, # size của rand
+                                                         dtype=torch.float32), # loại cho torch.Tensor
+                                             requires_grad=True) # Có thể cập nhât giá trị theo độ dốc (Đạo Hàm)
+            self.bias = torch.nn.Parameter(torch.randn(1,
+                                                       dtype=torch.float32),
+                                           requires_grad=True)
+
+
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            return self.weight * x + self.bias # tính toán và trả về dự đoán
+
+- Có nhiều điều ở trên tôi sẽ giải thích rõ hơn phần sau
+
+_________________________________________________________________________________________________________________________
+5. Điều cần thiết khi xậy dựng mô hình Pytorch
+
+- Ở Pytorch đã cho ta 4 Module cần thiết, có thể tạo ra hầu hết mọi loại mạng mà ta cần thiết
+- Các Module đó là:
+    + torch.nn: Module mà ta đã sử dụng ở trên
+        -> Chứa tất cả các khối xây dựng cho đồ thị tính toán (về cơ bản là một chuỗi các phép tính được thực hiện theo
+        một cách cụ thể).
+    + torch.nn.Parameter:
+        -> Lưu trữ các tensor có thể được sử dụng với nn.Module. Nếu require_grad=True gradient (được sử dụng để cập
+        nhật các tham số mô hình thông qua việc giảm độ dốc) được tính toán tự động, thì điều này thường được gọi là
+        "autograd".
+    + torch.nn.Module:
+        -> Lớp cơ sở cho tất cả các mô-đun mạng nơ-ron, tất cả các khối xây dựng cho mạng nơ-ron đều là các lớp con.
+        Nếu bạn đang xây dựng mạng nơ-ron trong PyTorch, mô hình của bạn nên phân lớp nn.Module. Yêu cầu triển khai
+        phương thức Forward().
+    + torch.optim :
+        -> Chứa các thuật toán tối ưu hóa khác nhau (những thuật toán này cho các tham số mô hình được lưu trữ trong
+        nn.Parameter cách thay đổi tốt nhất để cải thiện độ dốc giảm dần và từ đó giảm tổn thất).
+
+    + def forward(): luôn cần ghi đè cách tính toán của model ta tự tạo
+        -> Tất cả các lớp con nn.Module đều yêu cầu phương thức Forward(), phương thức này xác định tính toán sẽ diễn ra
+         trên dữ liệu được truyền đến nn.Module cụ thể (ví dụ: công thức hồi quy tuyến tính ở trên).
+    + torch.autograd():
+        -> chế độ tự động tính độ dốc (đạo hàm) của nn.Module
+- Nếu mà các bạn thấy bên trên khó hiểu thì bạn có thể coi hầu hết mọi thứ trong mạng nơ ron pytorch đến từ torch.nn
+    + nn.Module: chứa các khối xây dựng lớn hơn (Layer)
+    + nn.Parameter: chứa các tham số nhỏ hơn như weight và bias, và đặt cạnh nhau ta tao thành nn.Module
+    + forward(): nói các khối lớn hơn (nn.Module) tạo tính toán trên input (input đủ thông tin)
+    + torch.optim: chứa các phương thức tối ưu hóa tính toán giảm dần của độ dốc (đạo hàm), cải thiện tham số cho model
+
+- Note: Khi mà tạo 1 model NN từ lớp con của nn.Module thì ta luôn luôn phải định nghĩa phương thức "forward()"
+
+_________________________________________________________________________________________________________________________
+6. Kiểm tra nội dung của model Pytorch
+
+- Khi mà bạn tạo 1 mô hình nào đó nhưng bạn không biết nó có những gì thì ta không thể sửa và nâng cấp nó thêm được
+- Nên bây giờ ta vào cách xem nội dung của model đó chứa gì
+- Bạn có 1 số câu hỏi cho model ta viết hay của ai đó: weight là gì, ....
+
+- Xem weight ta dùng phương thức:
+    -> .parameter()
+EX:
+    >>> torch.manual_seed(42)
+    >>> linear = LinearRegression()
+    >>> print(list(linear.parameters()))
+    [Parameter containing:
+    tensor([0.3367], requires_grad=True), Parameter containing:
+    tensor([0.1288], requires_grad=True)]
+
+- Chúng ta cũng có thể lấy trạng thái (mô hình chứa gì) của mô hình bằng cách sử dụng
+    -> .state_dict()
+    >>> linear.state_dict()
+    OrderedDict([('weight', tensor([0.3367])), ('bias', tensor([0.1288]))])
+
+- ở trên cá bạn thấy các số weight và bias điều đó là do ta dùng hàm torch.rand
+- Và bản chất của nó là ta tạo ngẫu nhiên các tham số đó và cập nhật các tham số theo bộ dữ liệu mà ta tạo ra
+- Và bây giờ model của chúng ta dự đoán kém bới các hệ số chưa được trainning
+
+_________________________________________________________________________________________________________________________
+7. Tạo dự đoán với torch.inference_mode()
+- Để kiểm tra điều này, chúng ta có thể chuyển cho nó dữ liệu thử nghiệm X_test để xem nó dự đoán y_test chặt chẽ đến
+mức nào.
+- Khi chúng ta truyền dữ liệu đến mô hình của mình, nó sẽ đi qua phương thức Forward() của mô hình và tạo ra kết quả
+bằng cách sử dụng tính toán mà chúng ta đã xác định.
+- Bây giờ chúng ta đưa ra một số dự đọán:
+EX:
+    >>> with torch.inference_mode():
+            y_preds = linear(test_x)
+
+- Bạn có thể nhận thấy rằng chúng tôi đã sử dụng torch.inference_mode() làm trình quản lý bối cảnh (đó là chức năng của
+torch.inference_mode():) để đưa ra dự đoán.
+- Đúng như tên gọi, torch.inference_mode() được sử dụng khi sử dụng mô hình để suy luận (đưa ra dự đoán).
+- torch.inference_mode() tắt rất nhiều thứ (như theo dõi độ dốc, cần thiết cho việc đào tạo nhưng không cần cho suy
+luận) để thực hiện chuyển tiếp (dữ liệu đi qua phương thức Forward()) nhanh hơn.
+
+- Lưu ý: Trong mã PyTorch cũ hơn, bạn cũng có thể thấy torch.no_grad() được sử dụng để suy luận. Trong khi
+torch.inference_mode() và torch.no_grad() thực hiện những việc tương tự, thì torch.inference_mode() mới hơn, có khả năng
+nhanh hơn và được ưa thích hơn. Xem Tweet này từ PyTorch để biết thêm.
+    -> torch.inference_mode() <=> torch.no_grad()
+    -> bởi vì nó tắt hết chế độ theo dõi độ dốc (đạo hàm)
+EX:
+    >>> print(f"Number of testing samples: {len(test_x)}")
+    >>> print(f"Number of predictions made: {len(y_preds)}")
+    >>> print(f"Predicted values:\n{y_preds}")
+    Number of testing samples: 10
+    Number of predictions made: 10
+    Predicted values:
+    tensor([[0.3982],
+            [0.4049],
+            [0.4116],
+            [0.4184],
+            [0.4251],
+            [0.4318],
+            [0.4386],
+            [0.4453],
+            [0.4520],
+            [0.4588]])
+
+- Ta sẽ vẽ thử để quan sát dự đoán đó
+    >>>plot_predict(predictions=y_preds)
+    >>> test_y - y_preds
+    tensor([[0.5218],
+            [0.5231],
+            [0.5244],
+            [0.5256],
+            [0.5269],
+            [0.5282],
+            [0.5294],
+            [0.5307],
+            [0.5320],
+            [0.5332]])
+
+- Ôi! Những dự đoán đó có vẻ khá tệ...
+- Tuy nhiên, điều này có ý nghĩa khi bạn nhớ rằng mô hình của chúng ta chỉ sử dụng các giá trị tham số ngẫu nhiên để
+đưa ra dự đoán.
+- Nó thậm chí còn không nhìn vào các chấm Blue để cố gắng dự đoán các chấm Green lá cây.
+- Đã đến lúc thay đổi điều đó.
+
+_________________________________________________________________________________________________________________________
+8. Training Model
