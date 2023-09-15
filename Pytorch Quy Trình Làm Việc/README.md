@@ -8,7 +8,7 @@
 6. Kiểm tra nội dung của model Pytorch
 7. Tạo dự đoán với torch.inference_mode()
 8. Training Model
-
+9. Tạo Hàm mất mát (loss) và tối ưu (optimize) trong pytorch
 ## Chú ý:
 * name.txt: file tóm tắt lưu ý của name
 * code_jupyterNoteBook/name.ipynb: thực hành trên file .ipynb của name

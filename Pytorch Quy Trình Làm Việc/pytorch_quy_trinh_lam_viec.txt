@@ -7,6 +7,7 @@
 6. Kiểm tra nội dung của model Pytorch
 7. Tạo dự đoán với torch.inference_mode()
 8. Training Model
+9. Tạo Hàm mất mát (loss) và tối ưu (optimize) trong pytorch
 
 ########################################### END ##########################################
 
@@ -237,3 +238,20 @@ EX:
 
 _________________________________________________________________________________________________________________________
 8. Training Model
+
+- Hiện tại, mô hình của chúng tôi đang đưa ra dự đoán bằng cách sử dụng các tham số ngẫu nhiên để tính toán, về cơ bản
+là đoán (ngẫu nhiên).
+- Để khắc phục điều đó, chúng tôi có thể cập nhật các tham số bên trong của nó (tôi cũng gọi các tham số là mẫu), trọng
+số và giá trị độ lệch mà chúng tôi đặt ngẫu nhiên bằng cách sử dụng nn.Parameter() và torch.randn() để thể hiện dữ liệu
+tốt hơn.
+- Chúng ta có thể mã hóa cứng điều này (vì chúng ta biết các giá trị mặc định là trọng số = 0,7 và độ lệch = 0,3) nhưng
+điều đó có gì thú vị?
+- Phần lớn thời gian bạn sẽ không biết các thông số lý tưởng cho một mô hình là gì.
+- Thay vào đó, sẽ thú vị hơn nhiều khi viết mã để xem liệu mô hình có thể thử và tự tìm ra chúng hay không.
+
+_________________________________________________________________________________________________________________________
+9. Tạo Hàm mất mát (loss) và tối ưu (optimize) trong pytorch
+
+
+
+
