@@ -8,6 +8,7 @@
 7. Tạo dự đoán với torch.inference_mode()
 8. Training Model
 9. Tạo Hàm mất mát (loss) và tối ưu (optimize) trong pytorch
+10. Tạo vòng lặp tối ưu hóa trong Pytorch
 
 ########################################### END ##########################################
 
@@ -252,6 +253,45 @@ tốt hơn.
 _________________________________________________________________________________________________________________________
 9. Tạo Hàm mất mát (loss) và tối ưu (optimize) trong pytorch
 
+- Để cập nhật mô hình nghĩa là thay đổi weight và bias ta cần có nhứng phương thức trên
+- Trước khi tạp ta cần biết những thứ đó là gì?
+- Loss function:
+    + Pros: tính toán chênh lêch của đầu ra của mô hình (y_preds) và dữ liệu thực tế (test_y)
+    + Nó nằm ở: torch.nn
+    + Có 2 loại phổ biến:
+        -> MAE: mean absolute error: tihs toán trung bình của trị tuyệt đối các đầu ra dành cho regression
+            => torch.nn.L1Loss()
+        -> Cho phân loại nhị phân
+            => torch.nn.BCELoss()
+- Optimize function:
+    + Pros: cách mà chúng ta cập nhật tham số weight và bias
+    + Nó nằm ở: torch.optim
+    + Có 2 loại cơ bản:
+        -> SGD: stochastic gradient descent
+            => torch.optim.SGD(params, lr)
+        -> Adam oprimizer
+            => torch.optim.Adam(params, lr)
+
+- Bây giờ ta tạo các loss và optim để cải thiện model trên
+- Tùy vào các model mà bạn có thể dùng loss và optim nào
+EX:
+    >>> loss = torch.nn.L1Loss()
+    >>> optimizer = torch.optim.SGD(params=linear.parameters(), lr=0.01)
+    L1Loss()
+    SGD (
+    Parameter Group 0
+        dampening: 0
+        differentiable: False
+        foreach: None
+        lr: 0.01
+        maximize: False
+        momentum: 0
+        nesterov: False
+        weight_decay: 0
+    )
+
+_________________________________________________________________________________________________________________________
+10. Tạo vòng lặp tối ưu hóa trong Pytorch
 
 
 
