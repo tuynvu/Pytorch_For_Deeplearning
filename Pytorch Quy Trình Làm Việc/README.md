@@ -10,6 +10,8 @@
 8. Training Model
 9. Tạo Hàm mất mát (loss) và tối ưu (optimize) trong pytorch
 10. Tạo vòng lặp tối ưu hóa trong Pytorch
+11. Pytorch train loop
+12. Pytorch test loop
 ## Chú ý:
 * name.txt: file tóm tắt lưu ý của name
 * code_jupyterNoteBook/name.ipynb: thực hành trên file .ipynb của name

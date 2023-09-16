@@ -9,6 +9,7 @@
 8. Training Model
 9. Tạo Hàm mất mát (loss) và tối ưu (optimize) trong pytorch
 10. Tạo vòng lặp tối ưu hóa trong Pytorch
+11. Pytorch train loop
 
 ########################################### END ##########################################
 
@@ -292,6 +293,45 @@ EX:
 
 _________________________________________________________________________________________________________________________
 10. Tạo vòng lặp tối ưu hóa trong Pytorch
+
+- Ta đã có hàm loss và optim nên giờ ta sẽ tạo ra
+    + train loop: để tạo nên mối quan hệ giữa data và label
+    + test loop: để đánh giá về mối quan hệ giữa 2 thứ trên đã tốt chưa
+
+_________________________________________________________________________________________________________________________
+11. Pytorch train loop
+
+- Để có thể cho tạo quan hệ giữa các data và label
+- Các bước:
+    + forward pass: model sẽ duyệt từng dữ liệu và tính toán nó qua hàm forward() ( bắt buộc phải có trong class ..(nn.Module):
+        -> model(train_x)
+    + Tính toán loss: tính toán, đánh giá sai khác của đầu ra (predict) và dữ liệu thật
+        -> loss = loss_fc(y_pred, y_train)
+    + Tính toán độ dốc = 0: tối ưu hóa để độ dốc tiến dần về 0
+        -> optimizer.zero_grad()
+    + Thực hiên lan truyền ngược loss: Tính toán dy/dx tổn thất đối với mọi tham số mô hình sẽ được cập nhật (mỗi tham số có require_grad=True). Điều này được gọi là lan truyền ngược, do đó "ngược".
+        -> loss.backward()
+    + Cập nhật tối ưu: cập nhật parameter với requires_grad=True, liên quan đến loss grad được cải thiện
+        -> optimizer.step()
+
+    EX:
+    >>> for epoch in range(epochs):
+            model.train()
+            y_pred = model(x_train)
+            loss = loss_fn(y_pred, y_train)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+- Bạn có thể thấy thứ tự hơi khác một chút. Một số quy tắc chung:
+    + tính toán loss trước lan truyền ngược loss.backward()
+    + đạo hàm = 0 trước khi bước optimizer.step()
+    + optimizer.step() sau loss.backward()
+
+- Để biết các tài nguyên giúp hiểu những gì đang diễn ra đằng sau hậu trường với lan truyền ngược và giảm độ dốc, hãy
+xem phần chương trình giảng dạy bổ sung.
+
+_________________________________________________________________________________________________________________________
+12. Pytorch test loop
 
 
 
